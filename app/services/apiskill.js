@@ -1,8 +1,9 @@
 import supabase from "./supabase";
 
-export async function getChats() {
+export async function getSkills() {
   try {
-    const { data, error } = await supabase.from("chats").select("*");
+    let { data, error } = await supabase.from("skills").select("*");
+
     console.log(data);
 
     if (error) {
