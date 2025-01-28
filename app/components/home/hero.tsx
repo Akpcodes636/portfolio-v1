@@ -23,7 +23,31 @@ interface ProjectData {
 interface SkillData {
   id: number;
   category: string;
-  skills: string[];
+  name: string | string[]; // Instead of just string[]
+}
+
+interface ResumeData {
+  id: number;
+  certifications: string;
+  summary: string;
+  email: string;
+  full_name: string;
+  phone: string;
+  education: string;
+}
+
+interface AboutData {
+  id: number;
+  contact_email: string;
+  Full_name: string;
+  github_url: string;
+  linkedin_url: string;
+  location: string;
+  long_bio: string;
+  personal_interests: string;
+  short_bio: string;
+  title: string;
+  twitter_url: string;
 }
 
 const ChatPortfolio = () => {
@@ -51,9 +75,51 @@ const ChatPortfolio = () => {
     ]);
   };
 
+  const formatAboutResponse = (about: AboutData[]): string => {
+    if (!about?.length) return "About not found.";
+
+    return about
+      .map((profile) => {
+        const sections = [
+          // Header Section
+          `# ${profile.Full_name}`,
+          `${profile.title}`,
+
+          // Professional Summary
+          `## Professional Summary`,
+          `${profile.short_bio}`,
+
+          // Detailed Biography
+          `## About Me`,
+          `${profile.long_bio}`,
+
+          // Contact & Location
+          `## Contact Information`,
+          `📍 ${profile.location}`,
+          `📧 ${profile.contact_email}`,
+
+          // Social Links
+          `## Social Links`,
+          `🔗 LinkedIn: ${profile.linkedin_url}`,
+          `🐱 GitHub: ${profile.github_url}`,
+          `🐦 Twitter: ${profile.twitter_url}`,
+
+          // Personal Interests
+          `## Personal Interests`,
+          `${profile.personal_interests}`,
+        ];
+
+        // Filter out sections with null values
+        return sections
+          .filter((section) => section.indexOf("null") === -1)
+          .join("\n\n");
+      })
+      .join("\n\n---\n\n"); // Add separator between multiple profiles if needed
+  };
+
   const formatProjectsResponse = (projects: ProjectData[]) => {
     if (!projects?.length) return "No projects found.";
-
+    // console.log(projects);
     return projects
       .map((project) => {
         const technologiesList = Array.isArray(project.technologies)
@@ -77,11 +143,17 @@ const ChatPortfolio = () => {
 
   const formatSkillsResponse = (skills: SkillData[]) => {
     if (!skills?.length) return "No skills found.";
-
     return skills
-      .map(
-        (category) => `💡 ${category.category}:\n${category.skills.join(", ")}`
-      )
+      .map((category) => {
+        const skillsList = Array.isArray(category.name)
+          ? category.name.join(", ")
+          : category.name;
+
+        return `🔹 ${category.category}\n${skillsList
+          .split(", ")
+          .map((skill) => `  • ${skill.trim()}`)
+          .join("\n")}`;
+      })
       .join("\n\n");
   };
 
@@ -102,10 +174,7 @@ const ChatPortfolio = () => {
 
         case normalizedQuery.includes("about"): {
           const aboutData = await getAbout();
-          return (
-            aboutData?.[0]?.description ??
-            "About me information not available at the moment."
-          );
+          return formatAboutResponse(aboutData as AboutData[]);
         }
 
         case normalizedQuery.includes("project"): {
@@ -121,22 +190,43 @@ const ChatPortfolio = () => {
         case normalizedQuery.includes("experience") ||
           normalizedQuery.includes("resume"): {
           const resume = await getResume();
-          if (!resume?.length) return "No experience information available.";
 
+          // Check if resume exists
+          if (!resume?.length) {
+            return "No experience information available.";
+          }
+
+          // Map through resume entries and format them
           return resume
-            .map(
-              (entry: any) =>
-                `🏢 ${entry.company} - ${entry.position}\n📅 ${entry.duration}\n${entry.description}`
-            )
+            .map((entry: ResumeData) => {
+              return [
+                // Personal Information
+                `${entry.full_name}`,
+                `${entry.phone}`,
+
+                // Professional Information
+                `🏢 ${entry.certifications}`,
+                `📅 ${entry.education}`,
+
+                // Summary - Split and format each line
+                entry.summary
+                  .split("\n")
+                  .map((line) => `${line}`)
+                  .join("\n"),
+              ].join("\n");
+            })
             .join("\n\n");
         }
 
         case normalizedQuery.includes("contact"): {
           return `📫 You can reach me through:
 
-            GitHub: github.com/Akpcodes636
-            LinkedIn: linkedin.com/in/ewhe
-            Email: ewherheakpesiri@gmail.com`;
+    
+          🐱 GitHub: github.com/Akpcodes636
+          💼 LinkedIn: linkedin.com/in/ewherhe-akpesiri-73358819a
+          📧 Email: ewherheakpesiri@gmail.com
+          🐦 Twitter: x.com/bigRonNY65
+          📱 Phone: 08169699200`;
         }
 
         default:
