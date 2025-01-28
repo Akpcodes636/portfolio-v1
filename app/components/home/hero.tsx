@@ -261,7 +261,7 @@ const ChatPortfolio = () => {
   };
 
   return (
-    <div className="flex h-screen bg-gray-100">
+    <div className="flex min-h-screen bg-gray-200">
       {/* Sidebar */}
       <div className="hidden md:flex w-64 bg-gray-900 text-white flex-col">
         <div className="p-4 border-b border-gray-700">
@@ -324,7 +324,7 @@ const ChatPortfolio = () => {
               >
                 <div
                   className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${
-                    message.type === "user" ? "bg-blue-500" : "bg-gray-700"
+                    message.type === "user" ? "bg-blue-500" : "bg-black"
                   }`}
                 >
                   {message.type === "user" ? (
