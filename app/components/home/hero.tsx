@@ -310,7 +310,7 @@ const ChatPortfolio = () => {
                   setInputValue(item.toLowerCase());
                   handleSubmit(new Event("submit") as any);
                 }}
-                className="w-full text-left px-3 py-2 rounded hover:bg-gray-800 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                className="w-full text-left px-3 py-2 rounded hover:bg-gray-800 cursor-pointer transition-colors ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
               >
                 {item}
               </button>
@@ -363,7 +363,7 @@ const ChatPortfolio = () => {
               >
                 <div
                   className={`flex-shrink-0 h-8 w-8 rounded-full flex items-center justify-center ${
-                    message.type === "user" ? "bg-blue-500" : "bg-gray-900"
+                    message.type === "user" ? "bg-blue-500" : "bg-yellow-500"
                   } shadow-lg`}
                 >
                   {message.type === "user" ? (
@@ -376,7 +376,7 @@ const ChatPortfolio = () => {
                   className={`mx-2 px-4 py-2 rounded-lg ${
                     message.type === "user"
                       ? "bg-blue-500 text-white"
-                      : "bg-white shadow-md"
+                      : "bg-transparent shadow-[0px_4px_16px_1px_#0000001A]"
                   } whitespace-pre-wrap`}
                 >
                   {message.content}
