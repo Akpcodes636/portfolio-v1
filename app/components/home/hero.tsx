@@ -39,7 +39,7 @@ interface ResumeData {
 interface AboutData {
   id: number;
   contact_email: string;
-  Full_name: string;
+  full_name: string;
   github_url: string;
   linkedin_url: string;
   location: string;
@@ -95,7 +95,7 @@ const ChatPortfolio = () => {
       .map((profile) => {
         const sections = [
           // Header Section
-          `# ${profile.Full_name}`,
+          `# ${profile.full_name}`,
           `${profile.title}`,
 
           // Professional Summary
